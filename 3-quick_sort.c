@@ -1,70 +1,71 @@
 #include "sort.h"
-
 /**
- * quick_sort - sorts an array of integers in ascending order
- * @array: array to sort
- * @size: size of the array
- * Return: void
- */
+  * quick_sort - quicksort algorithm
+  * @array: array to be sorted
+  * @size: size of array
+  */
 void quick_sort(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
+	if (array == NULL || size <= 1)
 		return;
-	quick_sort_rec(array, 0, size - 1, size);
+	sort_alg(array, 0, size - 1, size);
 }
 
 /**
- * quick_sort_rec - recursive function for quick sort
- * @array: array to sort
- * @start: start of the array
- * @end: end of the array
- * @size: size of the array
- * Return: void
- */
-void quick_sort_rec(int *array, int start, int end, size_t size)
+  * sort_alg - recursive sorting algorithm
+  * @arr: array
+  * @left: leftmost index
+  * @right: rightmost index
+  * @size: full size of array
+  */
+void sort_alg(int *arr, int left, int right, size_t size)
 {
 	int pivot;
 
-	if (start >= end)
-		return;
-
-	pivot = partition(array, start, end, size);
-	quick_sort_rec(array, start, pivot - 1, size);
-	quick_sort_rec(array, pivot + 1, end, size);
+	if (left < right)
+	{
+		pivot = split(arr, left, right, size);
+		sort_alg(arr, left, pivot - 1, size);
+		sort_alg(arr, pivot + 1, right, size);
+	}
 }
 
 /**
- * partition - partitions the array
- * @array: array to partition
- * @start: start of the array
- * @end: end of the array
- * @size: size of the array
- * Return: index of the pivot
- */
-int partition(int *array, int start, int end, size_t size)
+  * split - split array
+  * @arr: array
+  * @left: leftmost index
+  * @right: rightmost index
+  * @size: full array size
+  * Return: pivot index
+  */
+int split(int *arr, int left, int right, size_t size)
 {
-	int pivot = array[end];
-	int i = start - 1, j = start, temp;
+	int i, i2, pivot, tmp;
 
-	while (j <= end - 1)
+	pivot = arr[right];
+	i = left;
+
+	for (i2 = left; i2 < right; i2++)
 	{
-		if (array[j] < pivot)
+		if (arr[i2] < pivot)
 		{
+			if (i != i2)
+			{
+				tmp = arr[i2];
+				arr[i2] = arr[i];
+				arr[i] = tmp;
+				print_array(arr, size);
+			}
 			i++;
-			temp = array[i];
-			array[i] = array[j];
-			array[j] = temp;
-			if (i != j)
-				print_array(array, size);
 		}
-		j++;
 	}
-	i++;
-
-	temp = array[i];
-	array[i] = array[end];
-	array[end] = temp;
-	print_array(array, size);
+	if (arr[i] != arr[right])
+	{
+		tmp = arr[i];
+		arr[i] = arr[right];
+		arr[right] = tmp;
+		print_array(arr, size);
+	}
 
 	return (i);
 }
